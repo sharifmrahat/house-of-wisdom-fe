@@ -1,13 +1,10 @@
 import "./App.css";
-import { Button } from "@/components/ui/button";
+import MainLayout from "./layouts/MainLayout";
 
 function App() {
   return (
     <>
-      <p className="text-3xl font-bold underline text-red-500">Hello world!</p>
-      <div>
-        <Button>Click me</Button>
-      </div>
+      <MainLayout />
     </>
   );
 }
