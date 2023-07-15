@@ -1,12 +1,12 @@
 import {
   Command,
-  CommandEmpty,
-  CommandGroup,
+  // CommandEmpty,
+  // CommandGroup,
   CommandInput,
-  CommandItem,
+  // CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
+  // CommandSeparator,
+  // CommandShortcut,
 } from "@/components/ui/command";
 
 const SearchBar = () => {

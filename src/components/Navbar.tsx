@@ -18,14 +18,16 @@ const Navbar = () => {
 
   return (
     <>
-      {publicRoutes.map((nav, i) => (
-        <div
-          className="text-primary_dark font-semibold border-b-2 border-b-transparent hover:border-b-primary_dark"
-          key={i}
-        >
-          <Link to={nav.route}>{nav.name}</Link>
-        </div>
-      ))}
+      <div className="flex justify-between items-center gap-10">
+        {publicRoutes.map((nav, i) => (
+          <div
+            className="text-primary_dark font-semibold border-b-2 border-b-transparent hover:border-b-primary_dark"
+            key={i}
+          >
+            <Link to={nav.route}>{nav.name}</Link>
+          </div>
+        ))}
+      </div>
     </>
   );
 };

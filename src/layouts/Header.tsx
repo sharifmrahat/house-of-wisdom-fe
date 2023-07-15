@@ -21,7 +21,11 @@ const Header = () => {
             <Navbar />
           </section>
           <section>
-            <Button asChild>
+            <Button
+              size="sm"
+              asChild
+              className="bg-primary_dark border-2 border-transparent rounded-sm shadow-sm hover:bg-transparent hover:border-primary_dark hover:text-primary_dark"
+            >
               <Link to="/login">Login</Link>
             </Button>
           </section>
