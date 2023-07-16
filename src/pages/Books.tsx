@@ -1,11 +1,9 @@
 import { useGetBooksQuery } from "@/redux/features/books/bookApi";
-import { useAppSelector } from "@/redux/hook";
 
 const Books = () => {
-  const { data, isLoading, error } = useGetBooksQuery(undefined);
+  // const { data, isLoading, error } = useGetBooksQuery(undefined);
 
-  console.log(data);
-  // const { priceRange, status } = useAppSelector((state) => state.books);
+  // console.log(data);
   return <div>Books Page</div>;
 };
 

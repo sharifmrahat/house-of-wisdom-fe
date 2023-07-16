@@ -3,16 +3,16 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const publicRoutes = [
     {
+      name: "Home",
+      route: "/",
+    },
+    {
       name: "Books",
       route: "/books",
     },
     {
       name: "About",
       route: "/about",
-    },
-    {
-      name: "Contact",
-      route: "/contact",
     },
   ];
 

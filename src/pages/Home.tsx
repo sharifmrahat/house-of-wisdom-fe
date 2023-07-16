@@ -1,4 +1,5 @@
 import HeroSection from "@/components/home/HeroSection";
+import LatestBooks from "@/components/home/LatestBooks";
 import Footer from "@/layouts/Footer";
 
 const Home = () => {
@@ -6,6 +7,9 @@ const Home = () => {
     <>
       <section>
         <HeroSection />
+      </section>
+      <section>
+        <LatestBooks />
       </section>
       <Footer />
     </>
