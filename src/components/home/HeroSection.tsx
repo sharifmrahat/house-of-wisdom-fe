@@ -46,7 +46,7 @@ export default function HeroSection() {
       </div>
       <div className="pt-5 lg:pt-0 mx-auto max-w-7xl">
         <img
-          className="py-5 w-full object-cover lg:w-[450px]"
+          className="py-5 w-full object-cover lg:w-[400px]"
           src={heroImage}
           alt="heroImage"
         />
