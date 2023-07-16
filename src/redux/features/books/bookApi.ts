@@ -3,7 +3,8 @@ import { api } from "@/redux/api/apiSlice";
 const bookApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getBooks: builder.query({
-      query: () => "/books",
+      query: ({ query, value }) =>
+        query && value ? `/books?${query}=${value}` : "/books",
     }),
     singleBook: builder.query({
       query: (id) => `/books/${id}`,

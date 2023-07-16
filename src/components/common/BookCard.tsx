@@ -1,4 +1,4 @@
-import { IBook } from "@/types/boook";
+import { IBook } from "@/types/book";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";

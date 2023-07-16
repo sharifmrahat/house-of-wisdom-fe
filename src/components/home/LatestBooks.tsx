@@ -1,12 +1,12 @@
 import { useGetBooksQuery } from "@/redux/features/books/bookApi";
-import { IBook } from "@/types/boook";
+import { IBook } from "@/types/book";
 import Spinner from "../common/Spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import BookCard from "../common/BookCard";
 
 const LatestBooks = () => {
-  const { data, isLoading, error } = useGetBooksQuery(undefined);
+  const { data, isLoading, error } = useGetBooksQuery({});
   return (
     <>
       <div className="mx-auto py-12  max-w-2xl lg:max-w-7xl  bg-white dark:bg-slate-700">
@@ -28,8 +28,8 @@ const LatestBooks = () => {
         {!isLoading && error && (
           <Alert className="w-fit mx-auto" variant="destructive">
             <ExclamationTriangleIcon className="h-4 w-4" />
-            <AlertTitle>Internal Server Error</AlertTitle>
-            <AlertDescription>{(error as any).data.message}</AlertDescription>
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{(error as any)?.data?.message}</AlertDescription>
           </Alert>
         )}
       </div>
