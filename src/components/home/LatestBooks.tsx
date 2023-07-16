@@ -1,18 +1,65 @@
 import { useGetBooksQuery } from "@/redux/features/books/bookApi";
-import { IBook } from "@/types/book";
+import { IBook, IGenre } from "@/types/book";
 import Spinner from "../common/Spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import BookCard from "../common/BookCard";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
 
 const LatestBooks = () => {
-  const { data, isLoading, error } = useGetBooksQuery({});
+  const [selectedGenre, setSelectedGenre] = useState("");
+  const { data, isLoading, error } = useGetBooksQuery({
+    query: "genre",
+    value: selectedGenre,
+  });
+  let genreArray: IGenre[] = [
+    "All Genre",
+    "Self Development",
+    "Religious",
+    "Programming",
+  ];
+
+  const handleGenreChange = (event: any) => {
+    if (event === "All Genre") {
+      setSelectedGenre("");
+    } else {
+      setSelectedGenre(event);
+    }
+  };
   return (
     <>
       <div className="mx-auto py-12  max-w-2xl lg:max-w-7xl  bg-white dark:bg-slate-700">
-        <h2 className="text-xl lg:text-2xl font-bold pb-10">
-          Latest Published Books
-        </h2>
+        <div className="flex flex-row justify-between items-center">
+          <h2 className="text-xl lg:text-2xl font-bold pb-10">
+            Latest Published Books
+          </h2>
+          <div className="flex gap-2 items-center">
+            <Select onValueChange={handleGenreChange} defaultValue="All Genre">
+              <SelectTrigger className="w-fit">
+                <SelectValue placeholder="All Genre" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Genre</SelectLabel>
+                  {genreArray.map((genre, i) => (
+                    <SelectItem key={i} value={genre}>
+                      {genre}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
         {isLoading && (
           <div className="w-fit mx-auto my-10 flex flex-col justify-center items-center gap-4">
             <Spinner></Spinner>

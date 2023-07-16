@@ -14,3 +14,9 @@ export type IBook = {
   publisher: string;
   reviews?: IReview[];
 };
+
+export type IGenre =
+  | "All Genre"
+  | "Self Development"
+  | "Religious"
+  | "Programming";
