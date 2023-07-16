@@ -1,6 +1,9 @@
 import { useGetBooksQuery } from "@/redux/features/books/bookApi";
 import { IBook } from "@/types/boook";
 import { Link } from "react-router-dom";
+import Spinner from "../common/Spinner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 const LatestBooks = () => {
   const { data, isLoading, error } = useGetBooksQuery(undefined);
@@ -10,11 +13,17 @@ const LatestBooks = () => {
         <h2 className="text-xl lg:text-2xl font-bold pb-10">
           Latest Published Books
         </h2>
+        {isLoading && (
+          <div className="w-fit mx-auto my-10 flex flex-col justify-center items-center gap-4">
+            <Spinner></Spinner>
+            <p className="text-xl font-semibold text-primary_dark text-center">
+              Books are loading...
+            </p>
+          </div>
+        )}
         <div className="grid gap-20 lg:gap-16 md:grid-cols-2 lg:grid-cols-5 mx-5 lg:mx-0">
-          {isLoading ? (
-            <p>Loading...</p>
-          ) : (
-            data.data?.map((book: IBook) => (
+          {data?.success &&
+            data?.data?.map((book: IBook) => (
               <div
                 key={book.title}
                 className="flex flex-col overflow-hidden rounded-md bg-slate-200/50 dark:bg-slate-800 shadow-md cursor-pointer hover:-translate-y-1 hover:scale-110 transition duration-300 ease-in-out"
@@ -54,9 +63,15 @@ const LatestBooks = () => {
                   </div>
                 </div> */}
               </div>
-            ))
-          )}
+            ))}
         </div>
+        {!isLoading && error && (
+          <Alert className="w-fit mx-auto" variant="destructive">
+            <ExclamationTriangleIcon className="h-4 w-4" />
+            <AlertTitle>Internal Server Error</AlertTitle>
+            <AlertDescription>{(error as any).data.message}</AlertDescription>
+          </Alert>
+        )}
       </div>
     </>
   );
