@@ -1,10 +1,27 @@
 import { api } from "@/redux/api/apiSlice";
 
+export type IFilterParam = { query: string | number };
+
 const bookApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getBooks: builder.query({
       query: ({ query, value }) =>
         query && value ? `/books?${query}=${value}` : "/books",
+    }),
+    getFilteredBooks: builder.query({
+      query: ({ query }) => {
+        // Create an array of query-value pairs and filter out any entries with undefined values
+        const queryPairs = Object.entries(query).filter(
+          ([, value]) => value !== undefined
+        );
+        // Create the query string based on the query-value pairs
+        const queryString = queryPairs
+          .map(([key, value]) => `${key}=${value}`)
+          .join("&");
+        // Combine the query string with the base URL
+        const url = queryString ? `/books?${queryString}` : "/books";
+        return url;
+      },
     }),
     singleBook: builder.query({
       query: (id) => `/books/${id}`,
@@ -42,6 +59,7 @@ const bookApi = api.injectEndpoints({
 
 export const {
   useGetBooksQuery,
+  useGetFilteredBooksQuery,
   useSingleBookQuery,
   useAddBookMutation,
   useAddReviewMutation,

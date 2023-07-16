@@ -1,4 +1,7 @@
-import { useGetBooksQuery } from "@/redux/features/books/bookApi";
+import {
+  useGetBooksQuery,
+  useGetFilteredBooksQuery,
+} from "@/redux/features/books/bookApi";
 import { IBook, IGenre } from "@/types/book";
 import Spinner from "../common/Spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -14,13 +17,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { format } from "date-fns";
 
 const LatestBooks = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
-  const { data, isLoading, error } = useGetBooksQuery({
-    query: "genre",
-    value: selectedGenre,
+  const [selectedYear, setSelectedYear] = useState("");
+
+  const { data, isLoading, error } = useGetFilteredBooksQuery({
+    query: { genre: selectedGenre, publishedYear: selectedYear },
   });
+
+  const { data: allBooks } = useGetBooksQuery({});
   let genreArray: IGenre[] = [
     "All Genre",
     "Self Development",
@@ -28,12 +35,19 @@ const LatestBooks = () => {
     "Programming",
   ];
 
+  // const yearArray = allBooks?.data.map((book: IBook) => book.publishedDate);
+  // yearArray.push;
+
   const handleGenreChange = (event: any) => {
     if (event === "All Genre") {
       setSelectedGenre("");
     } else {
       setSelectedGenre(event);
     }
+  };
+
+  const handleYearChange = (event: any) => {
+    setSelectedYear(event);
   };
   return (
     <>
@@ -43,21 +57,46 @@ const LatestBooks = () => {
             Latest Published Books
           </h2>
           <div className="flex gap-2 items-center">
-            <Select onValueChange={handleGenreChange} defaultValue="All Genre">
-              <SelectTrigger className="w-fit">
-                <SelectValue placeholder="All Genre" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Genre</SelectLabel>
-                  {genreArray.map((genre, i) => (
-                    <SelectItem key={i} value={genre}>
-                      {genre}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <div>
+              <Select
+                onValueChange={handleGenreChange}
+                defaultValue="All Genre"
+              >
+                <SelectTrigger className="w-fit">
+                  <SelectValue placeholder="All Genre" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Genre</SelectLabel>
+                    {genreArray.map((genre, i) => (
+                      <SelectItem key={i} value={genre}>
+                        {genre}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Select onValueChange={handleYearChange}>
+                <SelectTrigger className="w-fit">
+                  <SelectValue placeholder="Year" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Published Year</SelectLabel>
+                    {allBooks?.data?.map((book: IBook) => (
+                      <SelectItem
+                        key={book._id}
+                        value={format(new Date(book.publishedDate), "yyyy")}
+                      >
+                        {format(new Date(book.publishedDate), "yyyy")}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
         {isLoading && (
