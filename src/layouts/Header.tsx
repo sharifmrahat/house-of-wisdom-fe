@@ -1,5 +1,5 @@
-import Navbar from "@/components/Navbar";
-import SearchBar from "@/components/SearchBar";
+import Navbar from "@/components/header/Navbar";
+import SearchBar from "@/components/header/SearchBar";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -10,7 +10,7 @@ const Header = () => {
         <main className="flex flex-row justify-between items-center py-4 max-w-7xl mx-auto">
           <section className="flex">
             {/* <div>Logo</div> */}
-            <div className="text-lg lg:text-xl font-semibold">
+            <div className="text-xl lg:text-2xl font-semibold font-heading">
               House of Wisdom
             </div>
           </section>

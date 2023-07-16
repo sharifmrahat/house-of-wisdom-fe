@@ -6,7 +6,11 @@ import path from "path";
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3000,
+    // host: "127.0.0.1",
+    // port: 8000,
+    watch: {
+      usePolling: true,
+    },
   },
   resolve: {
     alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],

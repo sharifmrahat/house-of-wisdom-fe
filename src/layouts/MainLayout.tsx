@@ -5,7 +5,7 @@ export default function MainLayout() {
   return (
     <>
       <Header />
-      <main className="max-w-7xl">
+      <main>
         <Outlet />
       </main>
     </>
