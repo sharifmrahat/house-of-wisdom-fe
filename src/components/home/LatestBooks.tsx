@@ -2,7 +2,7 @@ import {
   useGetBooksQuery,
   useGetFilteredBooksQuery,
 } from "@/redux/features/books/bookApi";
-import { IBook, IGenre } from "@/types/book";
+import { IBook } from "@/types/book";
 import Spinner from "../common/Spinner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { format } from "date-fns";
+import { BookOpenIcon } from "@heroicons/react/24/outline";
 
 const LatestBooks = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
@@ -28,15 +29,14 @@ const LatestBooks = () => {
   });
 
   const { data: allBooks } = useGetBooksQuery({});
-  let genreArray: IGenre[] = [
-    "All Genre",
-    "Self Development",
-    "Religious",
-    "Programming",
-  ];
 
-  // const yearArray = allBooks?.data.map((book: IBook) => book.publishedDate);
-  // yearArray.push;
+  const yearArray = allBooks?.data?.map((book: IBook) =>
+    format(new Date(book.publishedDate), "yyyy")
+  );
+  yearArray?.unshift("All Year");
+
+  const genreArray = allBooks?.data?.map((book: IBook) => book.genre);
+  genreArray?.unshift("All Genre");
 
   const handleGenreChange = (event: any) => {
     if (event === "All Genre") {
@@ -47,7 +47,11 @@ const LatestBooks = () => {
   };
 
   const handleYearChange = (event: any) => {
-    setSelectedYear(event);
+    if (event === "All Year") {
+      setSelectedYear("");
+    } else {
+      setSelectedYear(event);
+    }
   };
   return (
     <>
@@ -68,7 +72,7 @@ const LatestBooks = () => {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Genre</SelectLabel>
-                    {genreArray.map((genre, i) => (
+                    {genreArray?.map((genre: string, i: number) => (
                       <SelectItem key={i} value={genre}>
                         {genre}
                       </SelectItem>
@@ -85,12 +89,9 @@ const LatestBooks = () => {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Published Year</SelectLabel>
-                    {allBooks?.data?.map((book: IBook) => (
-                      <SelectItem
-                        key={book._id}
-                        value={format(new Date(book.publishedDate), "yyyy")}
-                      >
-                        {format(new Date(book.publishedDate), "yyyy")}
+                    {yearArray?.map((year: string, i: number) => (
+                      <SelectItem key={i} value={year}>
+                        {year}
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -111,6 +112,14 @@ const LatestBooks = () => {
           {data?.success &&
             data?.data?.map((book: IBook) => <BookCard book={book} />)}
         </div>
+        {!data?.data.length && (
+          <div>
+            <Alert className="w-fit mx-auto">
+              <BookOpenIcon className="h-4 w-4" />
+              <AlertTitle>No Books Found!</AlertTitle>
+            </Alert>
+          </div>
+        )}
         {!isLoading && error && (
           <Alert className="w-fit mx-auto" variant="destructive">
             <ExclamationTriangleIcon className="h-4 w-4" />

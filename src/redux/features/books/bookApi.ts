@@ -16,10 +16,10 @@ const bookApi = api.injectEndpoints({
         );
         // Create the query string based on the query-value pairs
         const queryString = queryPairs
-          .map(([key, value]) => `${key}=${value}`)
+          .map(([key, value]) => (value ? `${key}=${value}` : ""))
           .join("&");
         // Combine the query string with the base URL
-        const url = queryString ? `/books?${queryString}` : "/books";
+        const url = queryString === "&" ? "/books" : `/books?${queryString}`;
         return url;
       },
     }),
