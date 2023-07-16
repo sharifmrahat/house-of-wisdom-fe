@@ -1,9 +1,12 @@
+import HeroSection from "@/components/home/HeroSection";
 import Footer from "@/layouts/Footer";
 
 const Home = () => {
   return (
     <>
-      Home
+      <section>
+        <HeroSection />
+      </section>
       <Footer />
     </>
   );
