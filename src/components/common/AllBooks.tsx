@@ -62,7 +62,7 @@ const AllBooks = ({ heading, allBooks }: AllBooksProps) => {
   };
   return (
     <>
-      <div className="mx-auto  max-w-2xl lg:max-w-7xl  bg-white dark:bg-slate-700">
+      <div className="mx-auto lg:max-w-7xl  bg-white dark:bg-slate-700">
         <div className="flex flex-row justify-between items-center py-10">
           <h2 className="text-xl lg:text-2xl font-bold">{heading}</h2>
           <div className="flex gap-2 items-center">

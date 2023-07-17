@@ -1,5 +1,7 @@
+import { IUser } from "./user";
+
 export type IReview = {
-  user: string;
+  user: IUser;
   description: string;
 };
 

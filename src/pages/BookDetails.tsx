@@ -17,6 +17,7 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import Reviews from "@/components/common/Reviews";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -120,7 +121,7 @@ const BookDetails = () => {
                     )}
                   </div>
                   {/* Edit & Delete Section */}
-                  <div className="bg-primary_light text-primary_dark flex flex-cow justify-evenly rounded-md mt-4 font-semibold">
+                  <div className="bg-primary_light text-primary_dark flex flex-row justify-evenly rounded-md mt-4 font-semibold">
                     <div className="px-2 py-1 flex gap-2 justify-center items-center cursor-pointer">
                       <PencilSquareIcon className="w-4 h-4"></PencilSquareIcon>{" "}
                       Edit
@@ -133,7 +134,9 @@ const BookDetails = () => {
                 </div>
               </div>
             </section>
-            <section className="my-12">Reviews</section>
+            <section className="my-12 w-3/5 mx-auto">
+              <Reviews bookId={id as string} />
+            </section>
           </>
         )}
       </div>
