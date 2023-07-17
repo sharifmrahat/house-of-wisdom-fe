@@ -1,11 +1,51 @@
 import SignupForm from "@/components/common/SignupForm";
 import libraryImage from "@/assets/images/libraryBuilding.jpg";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  useLoginUserMutation,
+  useSignupUserMutation,
+} from "@/redux/features/users/userApi";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 const Signup = () => {
+  const [inputData, setInputData] = useState<{
+    name: string;
+    email: string;
+    password: string;
+  }>({ name: "", email: "", password: "" });
+  const [signup, { data, isLoading, error, isSuccess }] =
+    useSignupUserMutation();
+  const [
+    login,
+    { data: loginResult, isSuccess: loginSuccess, error: loginError },
+  ] = useLoginUserMutation();
+
   const handleSignupSubmit = (data: any) => {
-    console.log("Signup:", data);
+    if (data) {
+      setInputData(data);
+      signup(data);
+    }
   };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) {
+      login({ email: inputData.email, password: inputData.password });
+    }
+    if (error || loginError) {
+      toast.error((error as any)?.data?.message);
+    }
+    if (loginSuccess) {
+      console.log(loginResult);
+      toast.success("User successfully Singed up");
+      localStorage.setItem("accessToken", loginResult?.data?.accessToken);
+      localStorage.setItem("loggedIn", "true");
+      navigate("/");
+    }
+  }, [isSuccess, error, loginSuccess]);
+
   return (
     <div className="flex flex-row justify-center items-center h-screen gap-10 overflow-hidden">
       <div className="w-1/2">
@@ -27,7 +67,7 @@ const Signup = () => {
         </section>
         <section className="mb-10">
           <div className="bg-primary_light p-6 rounded-md">
-            <SignupForm onSubmit={handleSignupSubmit} />
+            <SignupForm isLoading={isLoading} onSubmit={handleSignupSubmit} />
             <p className="text-center mt-5 text-sm text-slate-700">
               Already have an account?{" "}
               <Link

@@ -2,9 +2,10 @@ import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 
-const SignupForm: React.FC<{ onSubmit: SubmitHandler<FieldValues> }> = ({
-  onSubmit,
-}) => {
+const SignupForm: React.FC<{
+  onSubmit: SubmitHandler<FieldValues>;
+  isLoading: boolean;
+}> = ({ onSubmit, isLoading = false }) => {
   const {
     register,
     handleSubmit,
@@ -59,9 +60,10 @@ const SignupForm: React.FC<{ onSubmit: SubmitHandler<FieldValues> }> = ({
 
       <button
         type="submit"
+        disabled={isLoading}
         className="w-full px-4 py-2 text-primary_light bg-primary_dark hover:bg-primary_dark/90 rounded-md"
       >
-        Signup
+        {isLoading ? "Loading..." : "Signup"}
       </button>
     </form>
   );
