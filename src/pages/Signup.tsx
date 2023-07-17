@@ -8,6 +8,8 @@ import {
 } from "@/redux/features/users/userApi";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/features/users/userSlice";
 const Signup = () => {
   const [inputData, setInputData] = useState<{
     name: string;
@@ -27,6 +29,7 @@ const Signup = () => {
       signup(data);
     }
   };
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -38,10 +41,10 @@ const Signup = () => {
       toast.error((error as any)?.data?.message);
     }
     if (loginSuccess) {
-      console.log(loginResult);
-      toast.success("User successfully Singed up");
+      toast.success("Signup Success");
       localStorage.setItem("accessToken", loginResult?.data?.accessToken);
       localStorage.setItem("loggedIn", "true");
+      dispatch(setUser(data?.data));
       navigate("/");
     }
   }, [isSuccess, error, loginSuccess]);

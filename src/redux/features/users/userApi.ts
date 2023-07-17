@@ -17,10 +17,9 @@ const userApi = api.injectEndpoints({
       }),
     }),
     getMyProfile: builder.query({
-      query: (token) => ({
+      query: () => ({
         url: `/users/my-profile`,
         method: "GET",
-        headers: token,
       }),
     }),
     updateMyProfile: builder.mutation({
