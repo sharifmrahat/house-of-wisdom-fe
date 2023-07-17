@@ -44,16 +44,20 @@ const Header = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("loggedIn");
     dispatch(handleLogout());
+    dispatch(setUser({}));
     navigate("/");
   };
   useEffect(() => {
     if (loggedIn && data?.success) {
       dispatch(setUser(data?.data));
     }
-    if (isLoading) {
+    if (loggedIn && isLoading) {
       dispatch(setLoading(true));
     }
-    if (error) {
+    if (!isLoading) {
+      dispatch(setLoading(false));
+    }
+    if (loggedIn && error) {
       toast.error((error as any)?.data?.message);
     }
   }, []);

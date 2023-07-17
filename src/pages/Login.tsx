@@ -1,11 +1,43 @@
 import LoginForm from "@/components/common/LoginForm";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import libraryImage from "@/assets/images/libraryBuilding.jpg";
+import {
+  useGetMyProfileQuery,
+  useLoginUserMutation,
+} from "@/redux/features/users/userApi";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/features/users/userSlice";
 
 const Login = () => {
+  const [login, { data: loginResult, isSuccess, isLoading, error }] =
+    useLoginUserMutation();
+  const { data, isLoading: profileLoading } = useGetMyProfileQuery(undefined);
   const handleLoginSubmit = (data: any) => {
-    console.log("Login:", data);
+    if (data) {
+      login(data);
+    }
   };
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) {
+      localStorage.setItem("accessToken", loginResult?.data?.accessToken);
+      localStorage.setItem("loggedIn", "true");
+    }
+    if (error) {
+      toast.error((error as any)?.data?.message);
+    }
+    if (isSuccess && data?.success) {
+      dispatch(setUser(data?.data));
+      toast.success("Login Success");
+      navigate("/");
+    }
+  }, [isSuccess, error, isSuccess, data]);
 
   return (
     <div className="flex flex-row justify-center items-center h-screen gap-10 overflow-hidden">
@@ -28,7 +60,10 @@ const Login = () => {
         </section>
         <section className="mb-10">
           <div className="bg-primary_light p-6 rounded-md">
-            <LoginForm onSubmit={handleLoginSubmit} />
+            <LoginForm
+              onSubmit={handleLoginSubmit}
+              isLoading={isLoading || profileLoading}
+            />
             <p className="text-center mt-5 text-sm text-slate-700">
               Don't have an account?{" "}
               <Link

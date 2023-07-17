@@ -28,14 +28,18 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<Partial<IUser>>) => {
       state.user = action.payload;
+      state.isLoading = false;
+      (state.token = localStorage.getItem("accessToken") as string),
+        (state.loggedIn = localStorage.getItem("loggedIn") as string);
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
     handleLogout: (state) => {
       state.user = {};
-      state.token = "";
-      state.loggedIn = "";
+      state.isLoading = false;
+      (state.token = localStorage.getItem("accessToken") as string),
+        (state.loggedIn = localStorage.getItem("loggedIn") as string);
     },
   },
 });

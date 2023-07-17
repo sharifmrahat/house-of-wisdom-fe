@@ -12,7 +12,7 @@ const Navbar = () => {
     },
     {
       name: "About",
-      route: "/about",
+      route: "/profile",
     },
   ];
 

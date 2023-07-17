@@ -2,9 +2,10 @@ import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
-const LoginForm: React.FC<{ onSubmit: SubmitHandler<FieldValues> }> = ({
-  onSubmit,
-}) => {
+const LoginForm: React.FC<{
+  onSubmit: SubmitHandler<FieldValues>;
+  isLoading: boolean;
+}> = ({ onSubmit, isLoading = false }) => {
   const {
     register,
     handleSubmit,
@@ -45,9 +46,10 @@ const LoginForm: React.FC<{ onSubmit: SubmitHandler<FieldValues> }> = ({
 
       <button
         type="submit"
+        disabled={isLoading}
         className="w-full px-4 py-2 text-primary_light bg-primary_dark hover:bg-primary_dark/90 rounded-md"
       >
-        Login
+        {isLoading ? "Loading..." : "Login"}
       </button>
     </form>
   );

@@ -20,7 +20,12 @@ const Signup = () => {
     useSignupUserMutation();
   const [
     login,
-    { data: loginResult, isSuccess: loginSuccess, error: loginError },
+    {
+      data: loginResult,
+      isSuccess: loginSuccess,
+      isLoading: loginIsLoading,
+      error: loginError,
+    },
   ] = useLoginUserMutation();
 
   const handleSignupSubmit = (data: any) => {
@@ -40,7 +45,7 @@ const Signup = () => {
     if (error || loginError) {
       toast.error((error as any)?.data?.message);
     }
-    if (loginSuccess) {
+    if (isSuccess && loginSuccess) {
       toast.success("Signup Success");
       localStorage.setItem("accessToken", loginResult?.data?.accessToken);
       localStorage.setItem("loggedIn", "true");
@@ -70,7 +75,10 @@ const Signup = () => {
         </section>
         <section className="mb-10">
           <div className="bg-primary_light p-6 rounded-md">
-            <SignupForm isLoading={isLoading} onSubmit={handleSignupSubmit} />
+            <SignupForm
+              isLoading={isLoading || loginIsLoading}
+              onSubmit={handleSignupSubmit}
+            />
             <p className="text-center mt-5 text-sm text-slate-700">
               Already have an account?{" "}
               <Link
