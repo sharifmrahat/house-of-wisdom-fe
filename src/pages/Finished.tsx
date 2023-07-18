@@ -6,7 +6,7 @@ import { IBook } from "@/types/book";
 const Finished = () => {
   const { user: currentUser } = useAppSelector((state) => state.user);
   const allBooks = currentUser?.bookmark?.map(
-    (userBook) => userBook?.status === "Finished" && userBook.book
+    (userBook) => userBook?.status === "Finished" && userBook?.book
   );
   return (
     <section>

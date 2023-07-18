@@ -6,7 +6,7 @@ const Wishlist = () => {
   const { user: currentUser } = useAppSelector((state) => state.user);
 
   const allBooks = currentUser?.bookmark?.map(
-    (userBook) => userBook?.status === "Wishlist" && userBook.book
+    (userBook) => userBook?.status === "Wishlist" && userBook?.book
   );
   return (
     <section>
