@@ -23,6 +23,7 @@ import {
 import { useAppSelector } from "@/redux/hook";
 import { useUpdateBookmarkMutation } from "@/redux/features/users/userApi";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 export function BadgeDemo() {
   return <Badge>Badge</Badge>;
 }
@@ -33,10 +34,11 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
-  const [updateStatus, { isLoading }] = useUpdateBookmarkMutation();
+  const [updateStatus, { data, isSuccess, isLoading, error }] =
+    useUpdateBookmarkMutation();
 
   const bookmarkExist = currentUser?.bookmark?.find(
-    (userBook) => userBook.book._id === book._id
+    (userBook) => userBook?.book?._id === book._id
   );
 
   const handleUpdateBookmark = (status: string) => {
@@ -44,11 +46,20 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
       id: book._id,
       data: { status },
     };
-    toast.promise(updateStatus(option), {
-      success: `${status} Updated`,
-      error: `Failed to update ${status}`,
-    });
+    if (option) {
+      updateStatus(option);
+    }
   };
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Successfully updated");
+    }
+    if (error) {
+      toast.error((error as any)?.data?.message);
+    }
+  }, [isSuccess, error]);
+
+  console.log({ data, isSuccess, isLoading, error });
 
   return (
     <>

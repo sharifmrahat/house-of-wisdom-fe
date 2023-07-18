@@ -21,10 +21,17 @@ import {
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/redux/hook";
-import { handleLogout, setUser } from "@/redux/features/users/userSlice";
+import {
+  handleLogout,
+  setLoading,
+  setUser,
+} from "@/redux/features/users/userSlice";
+import { useGetMyProfileQuery } from "@/redux/features/users/userApi";
+import { useEffect } from "react";
 
 const Header = () => {
-  const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
+  const { user: currentUser } = useAppSelector((state) => state.user);
+  const { data, isLoading, refetch } = useGetMyProfileQuery(undefined);
 
   const dispatch = useDispatch();
 
@@ -35,9 +42,23 @@ const Header = () => {
     localStorage.removeItem("loggedIn");
     dispatch(handleLogout());
     dispatch(setUser({}));
+    refetch();
     navigate("/");
   };
 
+  const loggedIn = localStorage.getItem("loggedIn");
+
+  useEffect(() => {
+    if (loggedIn && data?.success) {
+      dispatch(setUser(data?.data));
+    }
+    if (loggedIn && isLoading) {
+      dispatch(setLoading(true));
+    }
+    if (!isLoading) {
+      dispatch(setLoading(false));
+    }
+  }, [currentUser, data, loggedIn, isLoading]);
   return (
     <>
       <header className="bg-primary_light text-primary_dark">

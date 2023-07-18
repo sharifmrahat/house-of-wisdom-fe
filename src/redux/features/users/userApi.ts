@@ -21,7 +21,7 @@ const userApi = api.injectEndpoints({
         url: `/users/my-profile`,
         method: "GET",
       }),
-      providesTags: ["bookmark"],
+      providesTags: ["bookmark", "book", "reviews"],
     }),
     updateMyProfile: builder.mutation({
       query: (data) => ({
@@ -36,7 +36,7 @@ const userApi = api.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["bookmark"],
+      invalidatesTags: ["bookmark", "book", "reviews"],
     }),
   }),
 });

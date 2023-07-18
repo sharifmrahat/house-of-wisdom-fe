@@ -7,7 +7,7 @@ const bookApi = api.injectEndpoints({
     getBooks: builder.query({
       query: ({ query, value }) =>
         query && value ? `/books?${query}=${value}` : "/books",
-      providesTags: ["bookmark", "book"],
+      providesTags: ["bookmark", "book", "reviews"],
     }),
     getFilteredBooks: builder.query({
       query: ({ query }) => {
@@ -23,11 +23,11 @@ const bookApi = api.injectEndpoints({
         const url = queryString === "&" ? "/books" : `/books?${queryString}`;
         return url;
       },
-      providesTags: ["bookmark", "book"],
+      providesTags: ["bookmark", "book", "reviews"],
     }),
     singleBook: builder.query({
       query: (id) => `/books/${id}`,
-      providesTags: ["bookmark", "book"],
+      providesTags: ["bookmark", "book", "reviews"],
     }),
     addBook: builder.mutation({
       query: (data) => ({

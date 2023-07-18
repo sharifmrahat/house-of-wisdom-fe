@@ -52,8 +52,11 @@ const Reviews = ({ bookId }: ReviewProps) => {
       </div>
       {reviews?.length ? (
         <div className="mb-10 my-5 ">
-          {reviews?.map((review: IReview) => (
-            <div className="bg-primary_light p-4 rounded-md flex flex-col mb-5">
+          {reviews?.map((review: IReview, idx: number) => (
+            <div
+              key={idx}
+              className="bg-primary_light p-4 rounded-md flex flex-col mb-5"
+            >
               <div className="grid grid-flow-col justify-start items-start gap-4">
                 <div>
                   <img
