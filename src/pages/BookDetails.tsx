@@ -1,8 +1,11 @@
 import Spinner from "@/components/common/Spinner";
 import { Badge } from "@/components/ui/badge";
-import { useSingleBookQuery } from "@/redux/features/books/bookApi";
+import {
+  useDeleteBookMutation,
+  useSingleBookQuery,
+} from "@/redux/features/books/bookApi";
 import { format } from "date-fns";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import {
@@ -20,6 +23,24 @@ import {
 } from "@heroicons/react/24/outline";
 
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+import {
   BookOpenIcon as BookOpenIconSolid,
   CheckCircleIcon as CheckCircleIconSolid,
   HeartIcon as HeartIconSolid,
@@ -28,17 +49,28 @@ import Reviews from "@/components/common/Reviews";
 import { useAppSelector } from "@/redux/hook";
 import { useUpdateBookmarkMutation } from "@/redux/features/users/userApi";
 import { toast } from "react-toastify";
+import EditBook from "./EditBook";
+import { useEffect } from "react";
 
 const BookDetails = () => {
   const { id } = useParams();
   const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
-  const { data, isLoading, error } = useSingleBookQuery(id);
+  const { data, isLoading, error } = useSingleBookQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
   const [updateStatus, { isLoading: updateLoading }] =
     useUpdateBookmarkMutation();
+
+  const [
+    deleteBook,
+    { isLoading: deleteLoading, error: errorDelete, isSuccess: deleteSuccess },
+  ] = useDeleteBookMutation();
 
   const bookmarkExist = currentUser?.bookmark?.find(
     (userBook) => userBook.book._id === data?.data?._id
   );
+
+  const validUser = data?.data?.publisher?._id === currentUser._id;
 
   const handleUpdateBookmark = (status: string) => {
     const option = {
@@ -50,6 +82,22 @@ const BookDetails = () => {
       error: `Failed to update ${status}`,
     });
   };
+
+  const navigate = useNavigate();
+
+  const handleDeleteBook = () => {
+    deleteBook(id);
+  };
+
+  useEffect(() => {
+    if (deleteSuccess) {
+      toast.success("Books successfully deleted");
+      navigate("/books");
+    }
+    if (error) {
+      toast.error((errorDelete as any)?.data?.message);
+    }
+  }, [deleteSuccess, error]);
   return (
     <>
       <div className="max-w-7xl mx-auto">
@@ -180,16 +228,52 @@ const BookDetails = () => {
                     )}
                   </div>
                   {/* Edit & Delete Section */}
-                  {currentUser && loggedIn && (
+                  {currentUser && loggedIn && validUser && (
                     <div className="bg-primary_light text-primary_dark flex flex-row justify-evenly rounded-md mt-4 font-semibold">
-                      <div className="px-2 py-1 flex gap-2 justify-center items-center cursor-pointer">
-                        <PencilSquareIcon className="w-4 h-4"></PencilSquareIcon>{" "}
-                        Edit
-                      </div>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <div className="px-2 py-1 flex gap-2 justify-center items-center cursor-pointer">
+                            <PencilSquareIcon className="w-4 h-4"></PencilSquareIcon>{" "}
+                            Edit
+                          </div>
+                        </DialogTrigger>
+
+                        <DialogContent className="w-fit">
+                          <DialogHeader>
+                            {/* <DialogTitle>Edit profile</DialogTitle> */}
+                          </DialogHeader>
+                          <EditBook book={data?.data} />
+                        </DialogContent>
+                      </Dialog>
+
                       <div className="bg-primary_dark/50 w-[1px]"></div>
-                      <div className="px-2 py-1 flex gap-2 justify-center items-center cursor-pointer">
-                        <TrashIcon className="w-4 h-4"></TrashIcon> Delete
-                      </div>
+
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <div className="px-2 py-1 flex gap-2 justify-center items-center cursor-pointer">
+                            <TrashIcon className="w-4 h-4"></TrashIcon> Delete
+                          </div>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure to delete?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Book Name: {data?.data?.title}
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleDeleteBook}
+                              className="bg-red-700 hover:bg-red-700"
+                            >
+                              Confirm
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   )}
                 </div>
