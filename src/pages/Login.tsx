@@ -28,13 +28,7 @@ const Login = () => {
       dispatch(setLoading(false));
       toast.success("Login Success");
       navigate("/");
-      // refetch();
     }
-    // console.log(loginResult?.success, myProfile?.data);
-    // if (loginResult?.success && myProfile?.success) {
-    //   toast.success("Login Success");
-    //   navigate("/");
-    // }
     if (error) {
       toast.error((error as any)?.data?.message);
     }

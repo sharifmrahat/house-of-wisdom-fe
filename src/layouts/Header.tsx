@@ -24,11 +24,7 @@ import { useAppSelector } from "@/redux/hook";
 import { handleLogout, setUser } from "@/redux/features/users/userSlice";
 
 const Header = () => {
-  const {
-    user: currentUser,
-    loggedIn,
-    isLoading,
-  } = useAppSelector((state) => state.user);
+  const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -93,8 +89,10 @@ const Header = () => {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="focus:bg-blue-300">
-                      <PlusCircleIcon className="w-4 h-5 mr-2" />
-                      Add Book
+                      <Link to="/addBook">
+                        <PlusCircleIcon className="w-4 h-5 mr-2 inline-block" />
+                        Add Book
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem

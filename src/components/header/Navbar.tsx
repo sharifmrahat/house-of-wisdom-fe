@@ -10,10 +10,10 @@ const Navbar = () => {
       name: "Books",
       route: "/books",
     },
-    {
-      name: "About",
-      route: "/profile",
-    },
+    // {
+    //   name: "About",
+    //   route: "/profile",
+    // },
   ];
 
   return (
