@@ -94,19 +94,22 @@ const Header = () => {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
-                      {" "}
-                      <HeartIcon className="w-4 h-5 mr-2 text-pink-600" />
-                      Wishlist
+                      <Link to="/wishlist">
+                        <HeartIcon className="w-4 h-5 mr-2 text-pink-600 inline-block" />
+                        Wishlist
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      {" "}
-                      <BookOpenIcon className="w-4 h-5 mr-2 text-violet-600" />
-                      Reading
+                      <Link to="/reading">
+                        <BookOpenIcon className="w-4 h-5 mr-2 text-violet-600 inline-block" />
+                        Reading
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      {" "}
-                      <CheckCircleIcon className="w-4 h-5 mr-2 text-teal-600" />
-                      Finished
+                      <Link to="/finished">
+                        <CheckCircleIcon className="w-4 h-5 mr-2 text-teal-600 inline-block" />
+                        Finished
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="focus:bg-blue-300">
