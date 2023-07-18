@@ -20,7 +20,6 @@ const AddReview = ({ bookId }: AddReviewProps) => {
       id: bookId,
       data: input,
     };
-    console.log(option);
     if (option) {
       submitReview(option);
     }

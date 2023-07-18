@@ -39,7 +39,6 @@ const EditBook = ({ book }: EditBookProps) => {
       id: book._id,
       data,
     };
-    console.log(option);
     if (option) {
       editBook(option);
     }

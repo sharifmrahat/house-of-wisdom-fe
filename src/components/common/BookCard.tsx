@@ -59,8 +59,6 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
     }
   }, [isSuccess, error]);
 
-  console.log({ data, isSuccess, isLoading, error });
-
   return (
     <>
       <div
