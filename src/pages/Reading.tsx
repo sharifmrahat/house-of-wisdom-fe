@@ -1,11 +1,20 @@
 import AllBooks from "@/components/common/AllBooks";
-import { useGetBooksQuery } from "@/redux/features/books/bookApi";
+
+import { useAppSelector } from "@/redux/hook";
+import { IBook } from "@/types/book";
 
 const Reading = () => {
-  const { data: allBooks } = useGetBooksQuery({});
+  const { user: currentUser } = useAppSelector((state) => state.user);
+  const allBooks = currentUser?.bookmark?.map(
+    (userBook) => userBook?.status === "Reading" && userBook.book
+  );
   return (
     <section>
-      <AllBooks heading="Reading" allBooks={allBooks?.data}></AllBooks>
+      <section>
+        {allBooks?.length && (
+          <AllBooks heading="Reading" allBooks={allBooks as IBook[]}></AllBooks>
+        )}
+      </section>
     </section>
   );
 };
