@@ -57,6 +57,7 @@ const BookDetails = () => {
   const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
   const { data, isLoading, error } = useSingleBookQuery(id, {
     refetchOnMountOrArgChange: true,
+    pollingInterval: 30000,
   });
   const [updateStatus, { isLoading: updateLoading }] =
     useUpdateBookmarkMutation();

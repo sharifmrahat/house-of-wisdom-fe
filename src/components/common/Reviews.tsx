@@ -3,13 +3,24 @@ import { useSingleBookQuery } from "@/redux/features/books/bookApi";
 import { IReview } from "@/types/book";
 import { Alert, AlertTitle } from "../ui/alert";
 import { useAppSelector } from "@/redux/hook";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import AddReview from "@/pages/AddReview";
 
 type ReviewProps = {
   bookId: string;
 };
 
 const Reviews = ({ bookId }: ReviewProps) => {
-  const { data } = useSingleBookQuery(bookId);
+  const { data } = useSingleBookQuery(bookId, {
+    refetchOnMountOrArgChange: true,
+    pollingInterval: 30000,
+  });
   const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
 
   const reviews: IReview[] = data?.data?.reviews?.map(
@@ -20,12 +31,23 @@ const Reviews = ({ bookId }: ReviewProps) => {
       <div className="flex flex-row justify-between items-center pt-10 pb-2 border-b border-b-primary_dark/50">
         <h2 className="text-xl lg:text-2xl font-bold">Reviews</h2>
         {currentUser && loggedIn && (
-          <div>
-            <button className="bg-primary_light rounded text-primary_dark flex justify-center items-center gap-2 font-semibold px-4 py-1">
-              <StarIcon className="w-4 h-4" />
-              <p>Write Review</p>
-            </button>
-          </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <div>
+                <button className="bg-primary_light rounded text-primary_dark flex justify-center items-center gap-2 font-semibold px-4 py-1">
+                  <StarIcon className="w-4 h-4" />
+                  <p>Write Review</p>
+                </button>
+              </div>
+            </DialogTrigger>
+
+            <DialogContent className="w-fit">
+              <DialogHeader>
+                <DialogTitle>{data?.data?.title}</DialogTitle>
+              </DialogHeader>
+              <AddReview bookId={bookId} />
+            </DialogContent>
+          </Dialog>
         )}
       </div>
       {reviews?.length ? (
@@ -40,7 +62,7 @@ const Reviews = ({ bookId }: ReviewProps) => {
                     alt=""
                   />
                 </div>
-                <div className="flex flex-col gap-1 justify-between items-start overflow-scroll">
+                <div className="flex flex-col gap-1 justify-between items-start">
                   <p className="text-primary_dark font-semibold">
                     {review?.user?.name}
                   </p>

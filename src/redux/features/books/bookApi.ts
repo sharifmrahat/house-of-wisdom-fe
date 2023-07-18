@@ -7,7 +7,7 @@ const bookApi = api.injectEndpoints({
     getBooks: builder.query({
       query: ({ query, value }) =>
         query && value ? `/books?${query}=${value}` : "/books",
-      providesTags: ["bookmark"],
+      providesTags: ["bookmark", "book"],
     }),
     getFilteredBooks: builder.query({
       query: ({ query }) => {
@@ -23,7 +23,7 @@ const bookApi = api.injectEndpoints({
         const url = queryString === "&" ? "/books" : `/books?${queryString}`;
         return url;
       },
-      providesTags: ["bookmark"],
+      providesTags: ["bookmark", "book"],
     }),
     singleBook: builder.query({
       query: (id) => `/books/${id}`,
@@ -35,6 +35,7 @@ const bookApi = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["book"],
     }),
     addReview: builder.mutation({
       query: ({ id, data }) => ({
@@ -42,6 +43,7 @@ const bookApi = api.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
+      invalidatesTags: ["book"],
     }),
     updateBook: builder.mutation({
       query: ({ id, data }) => ({
@@ -56,6 +58,7 @@ const bookApi = api.injectEndpoints({
         url: `/books/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["book"],
     }),
   }),
 });
