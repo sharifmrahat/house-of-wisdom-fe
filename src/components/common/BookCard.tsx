@@ -14,6 +14,7 @@ import {
   CheckCircleIcon,
   HeartIcon,
 } from "@heroicons/react/24/outline";
+import { useAppSelector } from "@/redux/hook";
 export function BadgeDemo() {
   return <Badge>Badge</Badge>;
 }
@@ -23,11 +24,12 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
-  const user = true;
+  const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
+
   return (
     <>
       <div
-        key={book.title}
+        key={book._id}
         className="flex flex-col overflow-hidden rounded-md bg-primary_light cursor-pointer w-[200px]"
       >
         <Link to={`/books/${book._id}`} className="h-[250px] w-[200px]">
@@ -64,7 +66,7 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
             </div>
           </div>
         </Link>
-        {user && (
+        {currentUser && loggedIn && (
           <div className="border-t border-t-primary_dark/20 text-primary_dark">
             <div className="flex flex-row justify-between items-center py-3 px-5 overflow-hidden">
               <TooltipProvider>

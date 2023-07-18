@@ -5,7 +5,7 @@ export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://house-of-wisdom-be.vercel.app/api/v1",
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers) => {
       const token = getToken();
       if (token) {
         headers.set("Authorization", token);

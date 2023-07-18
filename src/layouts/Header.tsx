@@ -57,10 +57,10 @@ const Header = () => {
     if (!isLoading) {
       dispatch(setLoading(false));
     }
-    if (loggedIn && error) {
+    if (data?.success && error) {
       toast.error((error as any)?.data?.message);
     }
-  }, []);
+  }, [currentUser, data, loggedIn, isLoading]);
   return (
     <>
       <header className="bg-primary_light text-primary_dark">

@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { useSingleBookQuery } from "@/redux/features/books/bookApi";
 import { format } from "date-fns";
 import { useParams } from "react-router-dom";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import {
   Tooltip,
   TooltipContent,
@@ -13,17 +15,17 @@ import {
   BookOpenIcon,
   CheckCircleIcon,
   HeartIcon,
-  PencilIcon,
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import Reviews from "@/components/common/Reviews";
+import { useAppSelector } from "@/redux/hook";
 
 const BookDetails = () => {
   const { id } = useParams();
+  const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
   const { data, isLoading, error } = useSingleBookQuery(id);
-  console.log(data);
-  const user = true;
+
   return (
     <>
       <div className="max-w-7xl mx-auto">
@@ -77,7 +79,7 @@ const BookDetails = () => {
                         </span>
                       </div>
                     </div>
-                    {user && (
+                    {currentUser && loggedIn && (
                       <div className="border-t border-t-primary_dark/20 text-primary_dark">
                         <div className="flex flex-row justify-between items-center py-3 px-5 overflow-hidden">
                           <TooltipProvider>
@@ -121,16 +123,18 @@ const BookDetails = () => {
                     )}
                   </div>
                   {/* Edit & Delete Section */}
-                  <div className="bg-primary_light text-primary_dark flex flex-row justify-evenly rounded-md mt-4 font-semibold">
-                    <div className="px-2 py-1 flex gap-2 justify-center items-center cursor-pointer">
-                      <PencilSquareIcon className="w-4 h-4"></PencilSquareIcon>{" "}
-                      Edit
+                  {currentUser && loggedIn && (
+                    <div className="bg-primary_light text-primary_dark flex flex-row justify-evenly rounded-md mt-4 font-semibold">
+                      <div className="px-2 py-1 flex gap-2 justify-center items-center cursor-pointer">
+                        <PencilSquareIcon className="w-4 h-4"></PencilSquareIcon>{" "}
+                        Edit
+                      </div>
+                      <div className="bg-primary_dark/50 w-[1px]"></div>
+                      <div className="px-2 py-1 flex gap-2 justify-center items-center cursor-pointer">
+                        <TrashIcon className="w-4 h-4"></TrashIcon> Delete
+                      </div>
                     </div>
-                    <div className="bg-primary_dark/50 w-[1px]"></div>
-                    <div className="px-2 py-1 flex gap-2 justify-center items-center cursor-pointer">
-                      <TrashIcon className="w-4 h-4"></TrashIcon> Delete
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -138,6 +142,15 @@ const BookDetails = () => {
               <Reviews bookId={id as string} />
             </section>
           </>
+        )}
+        {!isLoading && error && (
+          <Alert className="w-fit mx-auto" variant="destructive">
+            <ExclamationTriangleIcon className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription className="ml-4">
+              {(error as any)?.data?.message}
+            </AlertDescription>
+          </Alert>
         )}
       </div>
     </>

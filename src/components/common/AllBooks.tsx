@@ -115,9 +115,11 @@ const AllBooks = ({ heading, allBooks }: AllBooksProps) => {
         )}
         <div className="grid gap-20 lg:gap-16 md:grid-cols-2 lg:grid-cols-5 mx-5 lg:mx-0">
           {data?.success &&
-            data?.data?.map((book: IBook) => <BookCard book={book} />)}
+            data?.data?.map((book: IBook) => (
+              <BookCard book={book} key={book._id} />
+            ))}
         </div>
-        {!data?.data.length && (
+        {!data?.data.length && !error && (
           <div>
             <Alert className="w-fit mx-auto">
               <BookOpenIcon className="h-4 w-4" />
@@ -129,7 +131,9 @@ const AllBooks = ({ heading, allBooks }: AllBooksProps) => {
           <Alert className="w-fit mx-auto" variant="destructive">
             <ExclamationTriangleIcon className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{(error as any)?.data?.message}</AlertDescription>
+            <AlertDescription className="ml-4">
+              {(error as any)?.data?.message}
+            </AlertDescription>
           </Alert>
         )}
       </div>

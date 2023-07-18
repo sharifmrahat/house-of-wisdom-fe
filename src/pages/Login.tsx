@@ -14,6 +14,7 @@ const Login = () => {
   const [login, { data: loginResult, isSuccess, isLoading, error }] =
     useLoginUserMutation();
   const { data, isLoading: profileLoading } = useGetMyProfileQuery(undefined);
+
   const handleLoginSubmit = (data: any) => {
     if (data) {
       login(data);
@@ -29,15 +30,15 @@ const Login = () => {
       localStorage.setItem("accessToken", loginResult?.data?.accessToken);
       localStorage.setItem("loggedIn", "true");
     }
+    if (loginResult?.data?.accessToken) {
+      toast.success("Login Success");
+      dispatch(setUser(data?.data));
+      navigate("/");
+    }
     if (error) {
       toast.error((error as any)?.data?.message);
     }
-    if (isSuccess && data?.success) {
-      dispatch(setUser(data?.data));
-      toast.success("Login Success");
-      navigate("/");
-    }
-  }, [isSuccess, error, isSuccess, data]);
+  }, [isSuccess, error, isSuccess, data?.data]);
 
   return (
     <div className="flex flex-row justify-center items-center h-screen gap-10 overflow-hidden">

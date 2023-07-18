@@ -20,7 +20,10 @@ const SearchBar = () => {
 
   useEffect(() => {
     const handleDocumentClick = (event: any) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      if (
+        wrapperRef.current &&
+        !(wrapperRef.current as any).contains(event.target)
+      ) {
         setVisibleResult(false);
       }
     };

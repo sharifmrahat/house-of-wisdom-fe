@@ -45,14 +45,14 @@ const Signup = () => {
     if (error || loginError) {
       toast.error((error as any)?.data?.message);
     }
-    if (isSuccess && loginSuccess) {
+    if (loginResult?.data?.accessToken) {
       toast.success("Signup Success");
       localStorage.setItem("accessToken", loginResult?.data?.accessToken);
       localStorage.setItem("loggedIn", "true");
       dispatch(setUser(data?.data));
       navigate("/");
     }
-  }, [isSuccess, error, loginSuccess]);
+  }, [isSuccess, error, loginSuccess, loginResult]);
 
   return (
     <div className="flex flex-row justify-center items-center h-screen gap-10 overflow-hidden">
