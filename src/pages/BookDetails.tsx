@@ -66,7 +66,7 @@ const BookDetails = () => {
     useDeleteBookMutation();
 
   const bookmarkExist = currentUser?.bookmark?.find(
-    (userBook) => userBook.book._id === data?.data?._id
+    (userBook) => userBook?.book?._id === data?.data?._id
   );
 
   const validUser = data?.data?.publisher?._id === currentUser._id;
