@@ -1,8 +1,6 @@
 import Navbar from "@/components/header/Navbar";
 import SearchBar from "@/components/header/SearchBar";
 import { Button } from "@/components/ui/button";
-import { useGetMyProfileQuery } from "@/redux/features/users/userApi";
-import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import avatarImage from "@/assets/images/user-blank.png";
@@ -23,22 +21,18 @@ import {
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/redux/hook";
-import {
-  handleLogout,
-  setLoading,
-  setUser,
-} from "@/redux/features/users/userSlice";
-import { toast } from "react-toastify";
+import { handleLogout, setUser } from "@/redux/features/users/userSlice";
 
 const Header = () => {
-  const { user: currentUser } = useAppSelector((state) => state.user);
-  const { data, isLoading, error } = useGetMyProfileQuery(undefined);
+  const {
+    user: currentUser,
+    loggedIn,
+    isLoading,
+  } = useAppSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-
-  const loggedIn = localStorage.getItem("loggedIn");
 
   const handleLogoutStore = () => {
     localStorage.removeItem("accessToken");
@@ -47,20 +41,7 @@ const Header = () => {
     dispatch(setUser({}));
     navigate("/");
   };
-  useEffect(() => {
-    if (loggedIn && data?.success) {
-      dispatch(setUser(data?.data));
-    }
-    if (loggedIn && isLoading) {
-      dispatch(setLoading(true));
-    }
-    if (!isLoading) {
-      dispatch(setLoading(false));
-    }
-    if (data?.success && error) {
-      toast.error((error as any)?.data?.message);
-    }
-  }, [currentUser, data, loggedIn, isLoading]);
+
   return (
     <>
       <header className="bg-primary_light text-primary_dark">
