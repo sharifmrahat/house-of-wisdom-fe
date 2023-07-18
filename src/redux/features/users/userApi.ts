@@ -21,22 +21,22 @@ const userApi = api.injectEndpoints({
         url: `/users/my-profile`,
         method: "GET",
       }),
+      providesTags: ["bookmark"],
     }),
     updateMyProfile: builder.mutation({
-      query: ({ token, data }) => ({
+      query: (data) => ({
         url: `/users/my-profile`,
         method: "PATCH",
-        headers: token,
         body: data,
       }),
     }),
     updateBookmark: builder.mutation({
-      query: ({ token, id, data }) => ({
+      query: ({ id, data }) => ({
         url: `/users/bookmark/${id}`,
         method: "PATCH",
-        headers: token,
         body: data,
       }),
+      invalidatesTags: ["bookmark"],
     }),
   }),
 });

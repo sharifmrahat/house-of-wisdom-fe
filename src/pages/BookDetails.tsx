@@ -18,14 +18,38 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+
+import {
+  BookOpenIcon as BookOpenIconSolid,
+  CheckCircleIcon as CheckCircleIconSolid,
+  HeartIcon as HeartIconSolid,
+} from "@heroicons/react/24/solid";
 import Reviews from "@/components/common/Reviews";
 import { useAppSelector } from "@/redux/hook";
+import { useUpdateBookmarkMutation } from "@/redux/features/users/userApi";
+import { toast } from "react-toastify";
 
 const BookDetails = () => {
   const { id } = useParams();
   const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
   const { data, isLoading, error } = useSingleBookQuery(id);
+  const [updateStatus, { isLoading: updateLoading }] =
+    useUpdateBookmarkMutation();
 
+  const bookmarkExist = currentUser?.bookmark?.find(
+    (userBook) => userBook.book._id === data?.data?._id
+  );
+
+  const handleUpdateBookmark = (status: string) => {
+    const option = {
+      id: id,
+      data: { status },
+    };
+    toast.promise(updateStatus(option), {
+      success: `${status} Updated`,
+      error: `Failed to update ${status}`,
+    });
+  };
   return (
     <>
       <div className="max-w-7xl mx-auto">
@@ -85,8 +109,19 @@ const BookDetails = () => {
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
-                                <div>
-                                  <HeartIcon className="w-5 h-5" />
+                                <div
+                                  className={`${
+                                    updateLoading && "cursor-wait"
+                                  }`}
+                                  onClick={() =>
+                                    handleUpdateBookmark("Wishlist")
+                                  }
+                                >
+                                  {bookmarkExist?.status === "Wishlist" ? (
+                                    <HeartIconSolid className="w-5 h-5" />
+                                  ) : (
+                                    <HeartIcon className="w-5 h-5" />
+                                  )}
                                 </div>
                               </TooltipTrigger>
                               <TooltipContent className="bg-primary_dark text-primary_light border-none outline-none rounded">
@@ -97,8 +132,19 @@ const BookDetails = () => {
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
-                                <div>
-                                  <BookOpenIcon className="w-5 h-5" />
+                                <div
+                                  className={`${
+                                    updateLoading && "cursor-wait"
+                                  }`}
+                                  onClick={() =>
+                                    handleUpdateBookmark("Reading")
+                                  }
+                                >
+                                  {bookmarkExist?.status === "Reading" ? (
+                                    <BookOpenIconSolid className="w-5 h-5" />
+                                  ) : (
+                                    <BookOpenIcon className="w-5 h-5" />
+                                  )}
                                 </div>
                               </TooltipTrigger>
                               <TooltipContent className="bg-primary_dark text-primary_light border-none outline-none rounded">
@@ -109,8 +155,19 @@ const BookDetails = () => {
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
-                                <div>
-                                  <CheckCircleIcon className="w-5 h-5" />
+                                <div
+                                  className={`${
+                                    updateLoading && "cursor-wait"
+                                  }`}
+                                  onClick={() =>
+                                    handleUpdateBookmark("Finished")
+                                  }
+                                >
+                                  {bookmarkExist?.status === "Finished" ? (
+                                    <CheckCircleIconSolid className="w-5 h-5" />
+                                  ) : (
+                                    <CheckCircleIcon className="w-5 h-5" />
+                                  )}
                                 </div>
                               </TooltipTrigger>
                               <TooltipContent className="bg-primary_dark text-primary_light border-none outline-none rounded">

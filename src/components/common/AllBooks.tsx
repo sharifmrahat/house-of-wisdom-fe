@@ -26,9 +26,15 @@ const AllBooks = ({ heading, allBooks }: AllBooksProps) => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
 
-  const { data, isLoading, error } = useGetFilteredBooksQuery({
-    query: { genre: selectedGenre, publishedYear: selectedYear },
-  });
+  const { data, isLoading, error } = useGetFilteredBooksQuery(
+    {
+      query: { genre: selectedGenre, publishedYear: selectedYear },
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      pollingInterval: 30000,
+    }
+  );
 
   const genreArray = Array.from(
     new Set(allBooks?.map((book: IBook) => book.genre))
@@ -119,7 +125,7 @@ const AllBooks = ({ heading, allBooks }: AllBooksProps) => {
               <BookCard book={book} key={book._id} />
             ))}
         </div>
-        {!data?.data.length && !error && (
+        {!data?.success && !error && (
           <div>
             <Alert className="w-fit mx-auto">
               <BookOpenIcon className="h-4 w-4" />

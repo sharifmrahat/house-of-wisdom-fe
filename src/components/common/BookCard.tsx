@@ -14,7 +14,15 @@ import {
   CheckCircleIcon,
   HeartIcon,
 } from "@heroicons/react/24/outline";
+
+import {
+  BookOpenIcon as BookOpenIconSolid,
+  CheckCircleIcon as CheckCircleIconSolid,
+  HeartIcon as HeartIconSolid,
+} from "@heroicons/react/24/solid";
 import { useAppSelector } from "@/redux/hook";
+import { useUpdateBookmarkMutation } from "@/redux/features/users/userApi";
+import { toast } from "react-toastify";
 export function BadgeDemo() {
   return <Badge>Badge</Badge>;
 }
@@ -25,6 +33,22 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
+  const [updateStatus, { isLoading }] = useUpdateBookmarkMutation();
+
+  const bookmarkExist = currentUser?.bookmark?.find(
+    (userBook) => userBook.book._id === book._id
+  );
+
+  const handleUpdateBookmark = (status: string) => {
+    const option = {
+      id: book._id,
+      data: { status },
+    };
+    toast.promise(updateStatus(option), {
+      success: `${status} Updated`,
+      error: `Failed to update ${status}`,
+    });
+  };
 
   return (
     <>
@@ -72,8 +96,15 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <div>
-                      <HeartIcon className="w-5 h-5" />
+                    <div
+                      className={`${isLoading && "cursor-wait"}`}
+                      onClick={() => handleUpdateBookmark("Wishlist")}
+                    >
+                      {bookmarkExist?.status === "Wishlist" ? (
+                        <HeartIconSolid className="w-5 h-5" />
+                      ) : (
+                        <HeartIcon className="w-5 h-5" />
+                      )}
                     </div>
                   </TooltipTrigger>
                   <TooltipContent className="bg-primary_dark text-primary_light border-none outline-none rounded">
@@ -84,8 +115,15 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <div>
-                      <BookOpenIcon className="w-5 h-5" />
+                    <div
+                      className={`${isLoading && "cursor-wait"}`}
+                      onClick={() => handleUpdateBookmark("Reading")}
+                    >
+                      {bookmarkExist?.status === "Reading" ? (
+                        <BookOpenIconSolid className="w-5 h-5" />
+                      ) : (
+                        <BookOpenIcon className="w-5 h-5" />
+                      )}
                     </div>
                   </TooltipTrigger>
                   <TooltipContent className="bg-primary_dark text-primary_light border-none outline-none rounded">
@@ -96,8 +134,15 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <div>
-                      <CheckCircleIcon className="w-5 h-5" />
+                    <div
+                      className={`${isLoading && "cursor-wait"}`}
+                      onClick={() => handleUpdateBookmark("Finished")}
+                    >
+                      {bookmarkExist?.status === "Finished" ? (
+                        <CheckCircleIconSolid className="w-5 h-5" />
+                      ) : (
+                        <CheckCircleIcon className="w-5 h-5" />
+                      )}
                     </div>
                   </TooltipTrigger>
                   <TooltipContent className="bg-primary_dark text-primary_light border-none outline-none rounded">
