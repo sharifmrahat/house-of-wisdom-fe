@@ -6,7 +6,6 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { IBook } from "@/types/book";
 
@@ -23,8 +22,6 @@ const EditBook = ({ book }: EditBookProps) => {
     setValue,
     formState: { errors },
   } = useForm();
-
-  const navigate = useNavigate();
 
   const onSubmit = (input: any) => {
     const data = {

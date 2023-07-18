@@ -34,7 +34,7 @@ interface BookCardProps {
 
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const { user: currentUser, loggedIn } = useAppSelector((state) => state.user);
-  const [updateStatus, { data, isSuccess, isLoading, error }] =
+  const [updateStatus, { isSuccess, isLoading, error }] =
     useUpdateBookmarkMutation();
 
   const bookmarkExist = currentUser?.bookmark?.find(

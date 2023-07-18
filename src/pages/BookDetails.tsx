@@ -62,10 +62,8 @@ const BookDetails = () => {
   const [updateStatus, { isLoading: updateLoading }] =
     useUpdateBookmarkMutation();
 
-  const [
-    deleteBook,
-    { isLoading: deleteLoading, error: errorDelete, isSuccess: deleteSuccess },
-  ] = useDeleteBookMutation();
+  const [deleteBook, { error: errorDelete, isSuccess: deleteSuccess }] =
+    useDeleteBookMutation();
 
   const bookmarkExist = currentUser?.bookmark?.find(
     (userBook) => userBook.book._id === data?.data?._id
